@@ -1,0 +1,33 @@
+def sim_new_hfss(freq):
+    
+    csv='v11_3_underdrilled_cross.csv'
+    data = genfromtxt(csv, delimiter=',', skip_header=1)
+    theta=data[0:181,2]
+    theta_r=theta[::-1]*-1.
+    theta_full=np.concatenate([theta_r,theta])
+    
+    E_ind_i=(freq-70)*181+0
+    E_ind_f=(freq-70)*181+181
+    E = data[E_ind_i:E_ind_f,3]
+    N=np.max(E)
+    E_norm=E-N
+    E_r=E_norm[::-1]
+    E_full=np.concatenate([E_r,E_norm])
+    
+    H_ind_i=(freq-70)*181+0 + 36562
+    H_ind_f=(freq-70)*181+181 + 36562
+    H = data[H_ind_i:H_ind_f,3]
+    N=np.max(H)
+    H_norm=H-N
+    H_r=H_norm[::-1]
+    H_full=np.concatenate([H_r,H_norm])
+    
+    C_ind_i=(freq-70)*181+0 + 18283
+    C_ind_f=(freq-70)*181+181 + 18283
+    C = data[C_ind_i:C_ind_f,4]
+    N=np.max(E)
+    C_norm=C-N
+    C_r=C_norm[::-1]
+    C_full=np.concatenate([C_r,C_norm])
+    
+    return theta_full,E_full,H_full,C_full
